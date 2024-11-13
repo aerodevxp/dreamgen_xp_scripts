@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preferences</title>
+    <style>
+        body {
+            width: 200px;
+            font-family: Arial, sans-serif;
+            padding: 10px;
+        }
+        .color-picker {
+            margin-bottom: 10px;
+        }
+        .button {
+            padding: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <h1>DreamGen XP Settings</h1>
+    <h3>Text Highlight</h3>
+    <div class="color-picker">
+        <label for="highlight-color">Highlight Color:</label>
+        <input type="color" id="highlight-color" value="#FFFF00">
+    </div>
+    <button class="button" id="save-settings">Save Settings</button>
+
+    <script src="popup.js"></script>
+</body>
+</html>

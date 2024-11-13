@@ -1,0 +1,30 @@
+{
+    "manifest_version": 3,
+    "name": "DreamGen XP Addon",
+    "description": "Enhance your DreamGen XPrience!",
+    "manifest_version": 3,
+    "name": "DreamGen Quoted Text Highlighter",
+    "description": "Highlights quoted text in textareas without affecting the caret or text visibility.",
+    "version": "1.0",
+    "permissions": ["storage", "activeTab"],
+    "background": {
+        "service_worker": "background.js"
+    },
+    "content_scripts": [
+        {
+        "matches": ["https://dreamgen.com/app/*"],
+        "js": ["content.js"],
+        "css": ["styles.css"]
+        }
+    ],
+    "action": {
+        "default_popup": "popup.html",
+        "default_icon": {
+        "16": "icons/icon16.png",
+        "48": "icons/icon48.png",
+        "128": "icons/icon128.png"
+        }
+    },
+    "host_permissions": ["<all_urls>"]
+}
+    
