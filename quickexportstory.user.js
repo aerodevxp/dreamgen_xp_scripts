@@ -4,7 +4,7 @@
 // @version      1
 // @description  Export text from multiple text fields to clipboard or a .txt file with a UI button that responds to window width
 // @author       aeroraphxp
-// @match        https://dreamgen.com/app/stories/v2/*
+// @match        https://dreamgen.com/app/stories/v2/chapter/*
 // @grant        none
 // ==/UserScript==
 
