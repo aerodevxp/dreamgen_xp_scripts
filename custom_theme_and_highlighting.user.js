@@ -4,6 +4,8 @@
 // @match       https://dreamgen.com/app/*
 // @grant       none
 // @description CSS Customization!
+// @downloadURL https://github.com/aerodevxp/dreamgen_xp_scripts/raw/refs/heads/main/custom_theme_and_highlighting.user.js
+// @updateURL https://github.com/aerodevxp/dreamgen_xp_scripts/raw/refs/heads/main/custom_theme_and_highlighting.user.js
 // ==/UserScript==
 
 (function () {
