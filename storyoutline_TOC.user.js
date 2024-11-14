@@ -65,7 +65,6 @@
     outlineButton.style.border = 'none';
     outlineButton.style.borderRadius = '5px';
     outlineButton.style.cursor = 'pointer';
-    outlineButton.style.zIndex = '1000';
 
     function adjustButtonPosition() {
         if (window.innerWidth < 1280) {
