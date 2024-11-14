@@ -1,7 +1,8 @@
 // ==UserScript==
-// @name         Story Outline (Table Of Contents)
+// @name         Chapter Outline Navigation
 // @namespace    http://tampermonkey.net/
-// @description  Adds an outline button to navigate chapters in your story
+// @version      1
+// @description  Adds an outline button to navigate chapters
 // @author       aeroraphxp
 // @match        https://dreamgen.com/app/stories/v2/chapter/*
 // @grant        none
@@ -10,21 +11,17 @@
 (function() {
     'use strict';
 
-    //Feel free to change this variable if you don't like this layout: ***CHAPTER 1***
     const chapterPattern = /\*\*\*(.*?)\*\*\*/g;
 
     function extractChapters() {
         const textAreas = document.querySelectorAll('textarea');
         const chapters = [];
 
-        console.log("Extracting chapters from textareas...");
         textAreas.forEach((textarea, index) => {
             const matches = [...textarea.value.matchAll(chapterPattern)];
-            console.log(`Found ${matches.length} chapters in textarea #${index + 1}`);
             matches.forEach(match => {
                 const chapterTitle = match[1].trim();
                 const position = match.index;
-                console.log(`Chapter found: ${chapterTitle} at position ${position}`);
                 chapters.push({
                     title: chapterTitle || `Untitled Chapter ${index + 1}`,
                     textarea,
@@ -38,33 +35,22 @@
 
     function scrollToChapter(chapter) {
         const { textarea, position } = chapter;
-        console.log(`Scrolling to chapter: ${chapter.title} in textarea at position ${position}`);
         const scrollPosition = getCharacterScrollPosition(textarea, position);
-        console.log(`Calculated scroll position: ${scrollPosition}`);
         textarea.selectionStart = textarea.selectionEnd = position;
-
-        console.log('Target textarea:', textarea);
-        console.log('Textarea scrollTop before: ', textarea.scrollTop);
 
         textarea.blur();
         textarea.focus();
 
         setTimeout(() => {
             textarea.scrollTop = scrollPosition;
-            console.log(`Scrolled to position: ${textarea.scrollTop}`);
         }, 10);
     }
 
     function getCharacterScrollPosition(textarea, position) {
         const textBeforeChapter = textarea.value.substring(0, position);
         const linesBeforeChapter = textBeforeChapter.split('\n').length;
-        console.log(`Text before chapter: "${textBeforeChapter.slice(-50)}..."`);  // Log a snippet of text before chapter
-        console.log(`Lines before chapter: ${linesBeforeChapter}`);
-
         const lineHeight = parseInt(window.getComputedStyle(textarea).lineHeight);
-        console.log(`Line height: ${lineHeight}`);
         const scrollPosition = linesBeforeChapter * lineHeight;
-        console.log(`Scroll position: ${scrollPosition}`);
 
         return scrollPosition;
     }
@@ -82,12 +68,11 @@
     outlineButton.style.zIndex = '1000';
 
     function adjustButtonPosition() {
-        console.log("Adjusting button position based on window size...");
         if (window.innerWidth < 1280) {
-            outlineButton.style.right = '120px'; // Move the button closer to the right edge
+            outlineButton.style.right = '120px';
             outlineButton.style.top = '60px';
         } else {
-            outlineButton.style.right = '160px'; // Default position
+            outlineButton.style.right = '160px';
             outlineButton.style.top = '72px';
         }
     }
@@ -101,11 +86,12 @@
     menu.style.display = 'none';
     menu.style.padding = '10px';
     menu.style.zIndex = '1001';
+    menu.style.maxHeight = '250px';
+    menu.style.overflowY = 'auto';
 
     function showMenu() {
         const chapters = extractChapters();
-        console.log(`Opening menu with ${chapters.length} chapters...`);
-        menu.innerHTML = ''; // Clear the menu
+        menu.innerHTML = '';
 
         if (chapters.length === 0) {
             const noChapters = document.createElement('div');
@@ -125,20 +111,17 @@
                 chapterButton.style.cursor = 'pointer';
                 chapterButton.style.width = '100%';
 
-                // Scroll to the chapter when clicked
                 chapterButton.addEventListener('click', () => {
-                    console.log(`Chapter ${index + 1} clicked`);
                     scrollToChapter(chapter);
-                    menu.style.display = 'none'; // Close the menu after clicking
+                    menu.style.display = 'none';
                 });
 
                 menu.appendChild(chapterButton);
             });
         }
 
-        document.body.appendChild(menu); // Append to calculate width
+        document.body.appendChild(menu);
         const buttonRect = outlineButton.getBoundingClientRect();
-        const menuWidth = menu.offsetWidth;
         menu.style.top = `${buttonRect.bottom + 10}px`;
         menu.style.right = `50px`;
 
@@ -146,7 +129,6 @@
     }
 
     outlineButton.addEventListener('click', () => {
-        console.log('Outline button clicked');
         if (menu.style.display === 'none') {
             showMenu();
         } else {
