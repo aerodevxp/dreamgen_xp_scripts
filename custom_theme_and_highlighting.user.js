@@ -10,8 +10,17 @@
 (function() {
     'use strict';
 
+    const themes = [
+      'default',
+      'custom',
+      'lavender',
+    ];
+
     // CUSTOM SETTINGS
     const options = {
+        theme: 0,
+        customCSS: ``, //Make your own theme
+        incrementalCustomCss: "", //Add CSS On top of another theme
         enableHighlighting: true, // Toggle highlighting on/off
         highlightingRules: [
             [/[\s\S]+/g, "rgba(255, 255, 255, 0)", "", "0", 0], //ALL
@@ -20,6 +29,55 @@
         ],
     };
     // ================================
+
+    //Theme Things
+    function injectCustomCSS(css) {
+        const style = document.createElement('style');
+        style.type = 'text/css';
+        style.innerHTML = css;
+        document.head.appendChild(style);
+    }
+
+
+
+    if (options.theme >= 2)
+    {
+      const themes_css = [
+        //Lavender
+        `
+        textarea {
+    color: rgba(255, 255, 255, 1);
+}
+
+body {
+    color: rgba(215, 95, 226, 1);
+    background-image: linear-gradient(to right, rgba(23, 8, 24, 1), rgba(230, 160, 24, 1)); /* Fixed gradient syntax */
+    font-family: "Georgia", serif;
+}
+
+div.flex {
+    background-color: rgba(23, 8, 24, 1);
+    font-family: "Georgia", serif;
+}
+
+a.flex {
+    background-color: rgba(23, 8, 24, .1);
+    font-style: italic;
+}
+
+body.__variable_d65c78.__variable_86777a.__variable_9736f3.font-sans.is-chrome {
+
+}
+
+        `
+      ];
+      injectCustomCSS(themes_css[options.theme-2])
+
+    }else if (options.theme == 1)
+    {
+        injectCustomCSS(options.customCSS);
+    }
+    injectCustomCSS(options.incrementalCustomCss);
 
     // Highlighting
     if (options.enableHighlighting) {
@@ -120,5 +178,6 @@
 
         initialize();
     }
+
 
 })();
