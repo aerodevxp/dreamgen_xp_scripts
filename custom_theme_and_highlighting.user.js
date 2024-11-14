@@ -16,7 +16,7 @@
         highlightingRules: [
             [/[\s\S]+/g, "rgba(255, 255, 255, 0)", "", "0", 0], //ALL
             [/[“"]([^”"]+)[”"]/g, "rgb(221, 198, 115)", "black", "2", 0], // For dialogue quotes
-            [/[“"]([^!]+)[!]/g, "rgb(221, 115, 115)", "red", "2", 1], // For sentences starting with a quote and ending with an exclamation point
+            [/[*]([^*]+)[*]/g, "rgb(221, 115, 115)", "red", "2", 1], // For emphasis
         ],
     };
     // ================================
