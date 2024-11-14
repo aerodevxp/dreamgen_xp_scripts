@@ -11,26 +11,27 @@
     'use strict';
 
     const themes = [
-      'default',
-      'custom',
-      'lavender',
+        'default',
+        'custom',
+        'lavender',
     ];
 
     // CUSTOM SETTINGS
     const options = {
         theme: 0,
-        customCSS: ``, //Make your own theme
-        incrementalCustomCss: "", //Add CSS On top of another theme
+        customCSS: ``, // Make your own theme
+        incrementalCustomCss: "", // Add CSS On top of another theme
         enableHighlighting: true, // Toggle highlighting on/off
         highlightingRules: [
-            [/[\s\S]+/g, "rgba(255, 255, 255, 0)", "", "0", 0], //ALL
+            [/[\s\S]+/g, "rgba(255, 255, 255, 0)", "", "0", 0], // ALL
             [/[“"]([^”"]+)[”"]/g, "rgb(186, 157, 212)", "black", "2", 0], // For dialogue quotes
             [/[*]([^*]+)[*]/g, "rgb(231, 184, 245)", "black", "2", 1], // For emphasis
         ],
     };
+
     // ================================
 
-    //Theme Things
+    // Inject custom CSS into the page
     function injectCustomCSS(css) {
         const style = document.createElement('style');
         style.type = 'text/css';
@@ -38,48 +39,38 @@
         document.head.appendChild(style);
     }
 
+    if (options.theme >= 2) {
+        const themes_css = [
+            // Lavender theme
+            `
+            textarea {
+                color: rgba(255, 255, 255, 1);
+            }
 
+            body {
+                color: rgba(215, 95, 226, 1);
+                background-image: linear-gradient(to right, rgba(23, 8, 24, 1), rgba(230, 160, 24, 1));
+                font-family: "Georgia", serif;
+            }
 
-    if (options.theme >= 2)
-    {
-      const themes_css = [
-        //Lavender
-        `
-        textarea {
-    color: rgba(255, 255, 255, 1);
-}
+            div.flex {
+                background-color: rgba(23, 8, 24, 1);
+                font-family: "Georgia", serif;
+            }
 
-body {
-    color: rgba(215, 95, 226, 1);
-    background-image: linear-gradient(to right, rgba(23, 8, 24, 1), rgba(230, 160, 24, 1)); /* Fixed gradient syntax */
-    font-family: "Georgia", serif;
-}
-
-div.flex {
-    background-color: rgba(23, 8, 24, 1);
-    font-family: "Georgia", serif;
-}
-
-a.flex {
-    background-color: rgba(23, 8, 24, .1);
-    font-style: italic;
-}
-
-body.__variable_d65c78.__variable_86777a.__variable_9736f3.font-sans.is-chrome {
-
-}
-
-        `
-      ];
-      injectCustomCSS(themes_css[options.theme-2])
-
-    }else if (options.theme == 1)
-    {
+            a.flex {
+                background-color: rgba(23, 8, 24, .1);
+                font-style: italic;
+            }
+            `
+        ];
+        injectCustomCSS(themes_css[options.theme - 2]);
+    } else if (options.theme == 1) {
         injectCustomCSS(options.customCSS);
     }
     injectCustomCSS(options.incrementalCustomCss);
 
-    // Highlighting
+    // Highlighting text based on rules
     if (options.enableHighlighting) {
         function highlightText(text) {
             let highlightedText = text;
@@ -101,6 +92,7 @@ body.__variable_d65c78.__variable_86777a.__variable_9736f3.font-sans.is-chrome {
             return highlightedText;
         }
 
+        // Function to create and position overlay on textarea
         function createOverlay(textarea) {
             const updateOverlayPosition = () => {
                 const rect = textarea.getBoundingClientRect();
@@ -109,8 +101,12 @@ body.__variable_d65c78.__variable_86777a.__variable_9736f3.font-sans.is-chrome {
 
                 const overlay = parent.querySelector('.overlay');
                 if (overlay) {
-                    overlay.style.top = `${textarea.offsetTop}px`;
-                    overlay.style.left = `${textarea.offsetLeft}px`;
+                    // Recalculate the overlay position and size using getBoundingClientRect
+                    const parentRect = parent.getBoundingClientRect();
+
+                    overlay.style.position = 'absolute';
+                    overlay.style.top = `${rect.top - parentRect.top}px`; // Position relative to parent
+                    overlay.style.left = `${rect.left - parentRect.left}px`; // Position relative to parent
                     overlay.style.width = `${rect.width}px`;
                     overlay.style.height = `${rect.height}px`;
                 }
@@ -150,34 +146,42 @@ body.__variable_d65c78.__variable_86777a.__variable_9736f3.font-sans.is-chrome {
                     overlay.scrollLeft = textarea.scrollLeft;
                 });
 
+                // Update the overlay position and content
                 updateOverlayPosition();
                 updateOverlayContent();
 
                 textarea.addEventListener('input', updateOverlayContent);
             }
 
-            setInterval(() => {
-                updateOverlayPosition();
-                updateOverlayContent();
-            }, 300);
+            // Recalculate overlay position and content periodically when necessary
+            updateOverlayPosition();
+            updateOverlayContent();
         }
 
+        // Function to initialize overlay on all relevant textareas
         function initialize() {
             const textareas = document.querySelectorAll("textarea");
             textareas.forEach((textarea) => {
                 if (textarea.id && textarea.id.startsWith('interaction-') && !textarea.dataset.hasOverlay) {
                     textarea.dataset.hasOverlay = 'true';
-                    // Create overlay only if highlighting is enabled
                     createOverlay(textarea);
                 }
             });
         }
 
+        // Observe mutations in the document to handle dynamically added textareas
         const observer = new MutationObserver(initialize);
         observer.observe(document.body, { childList: true, subtree: true });
 
+        // Initialize on page load
         initialize();
+
+        // Add confirmation on window resize
+        window.addEventListener('resize', () => {
+            const userResponse = confirm('The window has been resized. Would you like to refresh the page to fix the overlay position?');
+            if (userResponse) {
+                location.reload(); // Refresh the page if the user agrees
+            }
+        });
     }
-
-
 })();
