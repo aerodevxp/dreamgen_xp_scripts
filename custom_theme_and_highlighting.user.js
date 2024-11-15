@@ -2,7 +2,6 @@
 // @name        DreamGen XP Theme
 // @namespace   Violentmonkey Scripts
 // @match       https://dreamgen.com/app/*
-// @author      aeroraphxp
 // @grant       none
 // @description CSS Customization!
 // @downloadURL https://github.com/aerodevxp/dreamgen_xp_scripts/raw/refs/heads/main/custom_theme_and_highlighting.user.js
@@ -12,10 +11,10 @@
 (function () {
     'use strict';
 
-    const themes = ['default', 'custom', 'lavender'];
+    const themes = ['default', 'custom', 'lavender', 'highcontrast'];
 
     const options = {
-        theme: 0,
+        theme: 0, //CHANGE THEME HERE!!
         customCSS: ``,
         incrementalCustomCss: "",
         enableHighlighting: true,
@@ -41,6 +40,36 @@
             body { color: rgba(215, 95, 226, 1); background-image: linear-gradient(to right, rgba(23, 8, 24, 1), rgba(230, 160, 24, 1)); }
             div.flex { background-color: rgba(23, 8, 24, 1); }
             a.flex { background-color: rgba(23, 8, 24, .1); font-style: italic; }
+            `,
+            `
+            .border,
+.border-r,
+.border-muted {
+    border-color: rgb(255, 255, 255);
+}
+
+button {
+    background-color: rgb(0, 0, 100);
+    border-color: rgb(0, 0, 100);
+}
+
+.bg-secondary {
+    color: rgb(0, 0, 0);
+    background-color: rgb(255, 255, 0);;
+}
+
+.bg-muted {
+    background-color: rgb(0, 0, 0);
+    border-color: rgb(0, 0, 0);
+}
+
+a {
+    color: rgb(255, 255, 0);
+}
+
+.text-muted-foreground {
+    color: rgb(255, 100, 255);
+}
             `
         ];
         injectCustomCSS(themes_css[options.theme - 2]);
