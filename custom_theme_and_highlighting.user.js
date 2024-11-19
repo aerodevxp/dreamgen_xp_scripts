@@ -187,28 +187,9 @@ a {
                 initialize();     // Recreate overlays
             }, 0);
         });
-
-      let lastRunTime = performance.now();
-
-      function returnIntervalBasedOnPerformance() {
-        const currentTime = performance.now();
-        const elapsedTime = currentTime - lastRunTime;
-        let interval = 0;
-
-        if (elapsedTime < 1000) {
-          interval = Math.max(500, interval - 100); // Shorten the interval if it's too quick
-        } else {
-          interval = Math.min(2000, interval + 100); // Increase the interval if performance drops
-        }
-
-        lastRunTime = currentTime;
-
-        return interval;
-      }
-
       setInterval(() => {
         deleteOverlays(); // Delete existing overlays
         initialize();     // Recreate overlays
-      }, returnIntervalBasedOnPerformance())
+      }, 5000)
     }
 })();
